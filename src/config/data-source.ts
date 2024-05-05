@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
+import logger from './logger'
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -17,13 +18,13 @@ export const AppDataSource = new DataSource({
 
 export const initializeDB = async () => {
   try {
-    console.log('********** Starting connection to Data Source... **********')
+    logger.info('********** Starting connection to Data Source... **********')
     // Initialize db connection
     await AppDataSource.initialize()
-    console.log('********** Data Source successfully initialized! **********')
+    logger.info('********** Data Source successfully initialized! **********')
     // Return db connection
     return AppDataSource
   } catch (error) {
-    console.log('********** Error during Data Source initialization :( **********')
+    logger.info('********** Error during Data Source initialization :( **********')
   }
 }

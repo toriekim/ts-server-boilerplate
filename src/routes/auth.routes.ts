@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express'
 import { encrypt } from '../helpers/encrypt'
 import { HTTP403Error, HTTP404Error } from '../helpers/httpErrors'
 import { UserRepository } from '../repositories/user.repository'
+import logger from '../config/logger'
 
 const authRouter = Router()
 
@@ -42,6 +43,7 @@ authRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
       isAdmin
     })
     const createdUser = await UserRepository.save(newUser)
+    logger.info('New user created: ', createdUser.id)
 
     const token = encrypt.generateToken({ id: newUser.id })
 

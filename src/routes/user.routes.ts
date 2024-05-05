@@ -3,6 +3,7 @@ import { isAdmin, requireToken } from '../middlewares/auth'
 import { AppDataSource } from '../config/data-source'
 import { User } from '../entities/User.entity'
 import { HTTP403Error, HTTP404Error } from '../helpers/httpErrors'
+import logger from '../config/logger'
 
 const UserRepository = AppDataSource.getRepository(User)
 
@@ -75,6 +76,8 @@ userRouter.put(
         .updateEntity(true)
         .execute()
 
+      logger.info('User updated successfully: ', updatedUser.raw[0])
+
       res.status(200).send(updatedUser.raw[0])
     } catch (err) {
       next(err)
@@ -106,7 +109,10 @@ userRouter.delete(
         .where('id = :id', { id })
         .execute()
 
-      if (deletedUser.affected) res.send(204)
+      if (deletedUser.affected) {
+        logger.info(`User with ID ${id} deleted successfully`)
+      }
+      res.send(204)
     } catch (err) {
       next(err)
     }

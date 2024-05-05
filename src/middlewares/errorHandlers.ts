@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { HTTP403Error, HTTP404Error, HTTPClientError } from '../helpers/httpErrors'
+import logger from '../config/logger'
 
 const handle404Error = (router: Router) => {
   router.use((req: Request, res: Response) => {
@@ -16,7 +17,7 @@ const handleClientError = (router: Router) => {
     }
     if (err instanceof HTTPClientError) {
       const { message, statusCode } = err
-      console.warn(message)
+      logger.warn({ message })
       res.status(statusCode).send(message)
     } else {
       next(err)
