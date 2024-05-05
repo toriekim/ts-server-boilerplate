@@ -10,7 +10,7 @@
       "build": "tsc",
       "start": "ts-node src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs",
-      "migration": " npm run typeorm migration:run -- -d ./src/data-source.ts",
+      "migration": " npm run typeorm migration:run -- -d ./src/db.ts",
       "seed": "node ./src/config/seed.ts",
       "lint": "npx eslint . --ext .ts --fix",
       "format": "npx prettier . --write"

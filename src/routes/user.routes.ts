@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { isAdmin, requireToken } from '../middlewares/auth'
-import { AppDataSource } from '../config/data-source'
+import { AppDataSource } from '../configs/db'
 import { User } from '../entities/User.entity'
-import { HTTP403Error, HTTP404Error } from '../helpers/httpErrors'
-import logger from '../config/logger'
+import { HTTP403Error, HTTP404Error } from '../utils/httpError.util'
+import logger from '../configs/logger'
 
 const UserRepository = AppDataSource.getRepository(User)
 

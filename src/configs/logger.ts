@@ -44,7 +44,11 @@ if (process.env.NODE_ENV === 'production') {
   })
   const consoleTransport = new Console({
     handleExceptions: true,
-    format: format.combine(format.colorize(), format.simple(), errorStackFormat())
+    format: format.combine(
+      format.colorize(),
+      format.simple(),
+      errorStackFormat()
+    )
   })
   logger.add(consoleTransport)
 }

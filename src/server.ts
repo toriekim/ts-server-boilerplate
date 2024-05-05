@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { applyMiddleware } from './helpers'
+import { applyMiddleware } from './utils/helper.util'
 import routes from './routes'
 import middlewares from './middlewares'
 import errorHandlers from './middlewares/errorHandlers'

@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import { IsEmail } from 'class-validator'
 import { Order } from './Order.entity'
-import { encrypt } from '../helpers/encrypt'
+import { encrypt } from '../utils/encrypt.util'
 
 @Entity({ name: 'users' })
 export class User {

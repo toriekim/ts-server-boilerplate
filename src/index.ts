@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv'
 import app from './server'
-import { initDependencies } from './config'
-import logger from './config/logger'
+import { initDependencies } from './configs'
+import logger from './configs/logger'
 
 dotenv.config()
 
@@ -13,7 +13,9 @@ const init = async () => {
 
   // Start the server
   app.listen(PORT, () =>
-    logger.info({ message: `⚡️ Server is running http://localhost:${PORT}...` })
+    logger.info({
+      message: `⚡️ Server is running http://localhost:${PORT}...`
+    })
   )
 }
 

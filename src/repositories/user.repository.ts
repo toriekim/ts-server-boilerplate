@@ -1,8 +1,8 @@
 import * as jwt from 'jsonwebtoken'
-import { AppDataSource } from '../config/data-source'
+import { AppDataSource } from '../configs/db'
 import { User } from '../entities/User.entity'
-import { encrypt } from '../helpers/encrypt'
-import { HTTP401Error, HTTP404Error } from '../helpers/httpErrors'
+import { encrypt } from '../utils/encrypt.util'
+import { HTTP401Error, HTTP404Error } from '../utils/httpError.util'
 
 const JWT_KEY = process.env.JWT_SECRET || 'superbigsecret'
 

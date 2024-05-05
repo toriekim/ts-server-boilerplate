@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response, Router } from 'express'
 import rateLimit from 'express-rate-limit'
-import { HTTP401Error } from '../helpers/httpErrors'
+import { HTTP401Error } from '../utils/httpError.util'
 import { UserRepository } from '../repositories/user.repository'
 
 // --- Request Limit Middleware ---
@@ -17,7 +17,11 @@ export const handleJSONBodyLimit = (router: Router) =>
   router.use(express.json({ limit: '10kb' })) // limit body to 10kb
 
 // --- Auth Middleware ---
-export const requireToken = async (req: Request, res: Response, next: NextFunction) => {
+export const requireToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const token = req.headers.authorization
     if (!token) {

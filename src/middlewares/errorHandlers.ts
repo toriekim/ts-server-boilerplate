@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express'
-import { HTTP403Error, HTTP404Error, HTTPClientError } from '../helpers/httpErrors'
-import logger from '../config/logger'
+import {
+  HTTP403Error,
+  HTTP404Error,
+  HTTPClientError
+} from '../utils/httpError.util'
+import logger from '../configs/logger'
 
 const handle404Error = (router: Router) => {
   router.use((req: Request, res: Response) => {
@@ -11,18 +15,20 @@ const handle404Error = (router: Router) => {
 type ErrorWithCode = Error & { code?: string }
 
 const handleClientError = (router: Router) => {
-  router.use((err: ErrorWithCode, req: Request, res: Response, next: NextFunction) => {
-    if (err.code == 'EBADCSRFTOKEN') {
-      err = new HTTP403Error()
+  router.use(
+    (err: ErrorWithCode, req: Request, res: Response, next: NextFunction) => {
+      if (err.code == 'EBADCSRFTOKEN') {
+        err = new HTTP403Error()
+      }
+      if (err instanceof HTTPClientError) {
+        const { message, statusCode } = err
+        logger.warn({ message })
+        res.status(statusCode).send(message)
+      } else {
+        next(err)
+      }
     }
-    if (err instanceof HTTPClientError) {
-      const { message, statusCode } = err
-      logger.warn({ message })
-      res.status(statusCode).send(message)
-    } else {
-      next(err)
-    }
-  })
+  )
 }
 
 const handleServerError = (router: Router) => {

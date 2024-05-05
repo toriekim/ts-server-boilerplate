@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import morgan from 'morgan'
-import logger from '../config/logger'
+import logger from '../configs/logger'
 
 const myStream = {
   write: (text: string) => logger.info(text)

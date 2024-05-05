@@ -1,3 +1,7 @@
 dist
-.eslintrc.cjs
-.prettierrc.js
+build
+coverage
+dist
+*.js
+*.cjs
+*.mjs

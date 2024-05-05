@@ -25,6 +25,8 @@ export const initializeDB = async () => {
     // Return db connection
     return AppDataSource
   } catch (error) {
-    logger.info('********** Error during Data Source initialization :( **********')
+    logger.info(
+      '********** Error during Data Source initialization :( **********'
+    )
   }
 }

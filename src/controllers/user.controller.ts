@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { AppDataSource } from '../config/data-source'
+import { AppDataSource } from '../configs/db'
 import { User } from '../entities/User.entity'
-import { encrypt } from '../helpers/encrypt'
+import { encrypt } from '../utils/encrypt.util'
 import * as cache from 'memory-cache'
 
 export class UserController {
@@ -20,7 +20,9 @@ export class UserController {
     // userRepository.create({ Name, email, password });
     const token = encrypt.generateToken({ id: user.id })
 
-    return res.status(200).json({ message: 'User created successfully', token, user })
+    return res
+      .status(200)
+      .json({ message: 'User created successfully', token, user })
   }
 
   static async getUsers(req: Request, res: Response) {
