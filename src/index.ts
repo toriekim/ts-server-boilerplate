@@ -1,24 +1,17 @@
-import { AppDataSource } from "./data-source"
-import * as express from "express"
-import * as dotenv from "dotenv"
-import { Request, Response } from "express"
-import {userRouter} from "./routes/user.routes"
-import { User } from "./entity/User.entity"
+import * as dotenv from 'dotenv'
+import app from './server'
+import { initDependencies } from './config'
 
-AppDataSource.initialize().then(async () => {
+dotenv.config()
 
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
+const PORT = Number(process.env.PORT || 3000)
 
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
+const init = async () => {
+  // Connect to the database
+  await initDependencies()
 
-    console.log("Here you can setup and run express / fastify / any other framework.")
+  // Start the server
+  app.listen(PORT, () => console.log(`⚡️ Server is running http://localhost:${PORT}...`))
+}
 
-}).catch(error => console.log(error))
+init()

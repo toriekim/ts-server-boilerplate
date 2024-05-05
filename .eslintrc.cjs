@@ -6,7 +6,7 @@ module.exports = {
     'prettier',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    'plugin:prettier/recommended'
   ],
   plugins: ['@typescript-eslint'],
   parserOptions: {
@@ -17,14 +17,8 @@ module.exports = {
   env: {
     es6: true,
     node: true
+  },
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'off'
   }
-  // rules: {
-  //   'no-var': 'error',
-  //   semi: 'error',
-  //   indent: ['error', 2, { SwitchCase: 1 }],
-  //   'no-multi-spaces': 'error',
-  //   'space-in-parens': 'error',
-  //   'no-multiple-empty-lines': 'error',
-  //   'prefer-const': 'error',
-  // },
 }
