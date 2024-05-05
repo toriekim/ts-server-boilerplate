@@ -4,13 +4,9 @@ import { User } from '../entities/User.entity'
 import { encrypt } from '../utils/encrypt.util'
 import { HTTP401Error, HTTP404Error } from '../utils/httpError.util'
 
-const JWT_KEY = process.env.JWT_SECRET || 'superbigsecret'
+const { JWT_SECRET = 'superbigsecret' } = process.env
 
 export const UserRepository = AppDataSource.getRepository(User).extend({
-  findById(id: string) {
-    return this.findOneBy({ id })
-  },
-
   findByName(firstName: string, lastName: string) {
     return this.createQueryBuilder('user')
       .where('user.firstName = :firstName', { firstName })
@@ -32,7 +28,7 @@ export const UserRepository = AppDataSource.getRepository(User).extend({
 
   async findByToken(token: string) {
     try {
-      const { id } = jwt.verify(token, JWT_KEY)
+      const { id } = jwt.verify(token, JWT_SECRET)
       const user = await this.findOneBy({ id })
       if (!user) {
         throw new HTTP404Error(`User not found by token`)
@@ -45,7 +41,7 @@ export const UserRepository = AppDataSource.getRepository(User).extend({
 
   async hasToken(token: string) {
     try {
-      const { id } = jwt.verify(token, JWT_KEY)
+      const { id } = jwt.verify(token, JWT_SECRET)
       const user = await this.findOneBy(id)
       return user
     } catch (err) {

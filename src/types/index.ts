@@ -11,3 +11,21 @@ export type Route = {
   method: string
   handler: Handler | Handler[]
 }
+
+export interface User {
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+  password: string
+  isAdmin: boolean
+}
+
+export interface UserUpdateOptions {
+  firstName?: string
+  lastName?: string
+  username?: string
+  email?: string
+  password?: string
+  isAdmin?: boolean
+}

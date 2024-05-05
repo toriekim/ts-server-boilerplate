@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import * as dotenv from 'dotenv'
-// import { UserResponse } from '../dto/user.dto'
 
 dotenv.config()
 

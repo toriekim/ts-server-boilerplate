@@ -1,69 +1,57 @@
-import { Request, Response } from 'express'
-import { AppDataSource } from '../configs/db'
-import { User } from '../entities/User.entity'
-import { encrypt } from '../utils/encrypt.util'
-import * as cache from 'memory-cache'
+import { NextFunction, Request, Response } from 'express'
+import { HTTP403Error } from '../utils/httpError.util'
+import * as userService from '../services/user.service'
 
-export class UserController {
-  static async signup(req: Request, res: Response) {
-    const { name, email, password, role } = req.body
-    const encryptedPassword = await encrypt.hashPassword(password)
-    const user = new User()
-    user.name = name
-    user.email = email
-    user.password = encryptedPassword
-    user.role = role
-
-    const userRepository = AppDataSource.getRepository(User)
-    await userRepository.save(user)
-
-    // userRepository.create({ Name, email, password });
-    const token = encrypt.generateToken({ id: user.id })
-
-    return res
-      .status(200)
-      .json({ message: 'User created successfully', token, user })
-  }
-
-  static async getUsers(req: Request, res: Response) {
-    const data = cache.get('data')
-    if (data) {
-      console.log('serving from cache')
-      return res.status(200).json({
-        data
-      })
-    } else {
-      console.log('serving from db')
-      const userRepository = AppDataSource.getRepository(User)
-      const users = await userRepository.find()
-
-      cache.put('data', users, 6000)
-      return res.status(200).json({
-        data: users
-      })
-    }
-  }
-
-  static async updateUser(req: Request, res: Response) {
-    const { id } = req.params
-    const { name, email } = req.body
-    const userRepository = AppDataSource.getRepository(User)
-    const user = await userRepository.findOne({
-      where: { id }
-    })
-    user.name = name
-    user.email = email
-    await userRepository.save(user)
-    res.status(200).json({ message: 'udpdate', user })
-  }
-
-  static async deleteUser(req: Request, res: Response) {
-    const { id } = req.params
-    const userRepository = AppDataSource.getRepository(User)
-    const user = await userRepository.findOne({
-      where: { id }
-    })
-    await userRepository.remove(user)
-    res.status(200).json({ message: 'ok' })
+async function get(req: Request, res: Response, next: NextFunction) {
+  try {
+    const users = await userService.getAll()
+    res.status(200).send({ data: users })
+  } catch (err) {
+    next(err)
   }
 }
+
+async function getById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params
+    const user = await userService.getById(id)
+    res.status(200).send({ data: user })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params
+    const { id: reqUserId } = req.user
+    const { updateOptions } = req.body
+
+    if (reqUserId !== id) {
+      throw new HTTP403Error('User not authorized')
+    }
+    const updatedUser = await userService.update(id, updateOptions)
+    res
+      .status(200)
+      .send({ user: updatedUser, message: 'User updated successfully' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function remove(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params
+    const { id: reqUserId } = req.user
+
+    if (reqUserId === id) {
+      throw new HTTP403Error('User cannot delete themself')
+    }
+    await userService.remove(id)
+    res.status(204).send({ message: 'User deleted successfully' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export { get, getById, update, remove }

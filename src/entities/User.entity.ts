@@ -4,12 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   BeforeInsert,
-  BeforeUpdate
+  DeleteDateColumn
 } from 'typeorm'
 import { IsEmail } from 'class-validator'
-import { Order } from './Order.entity'
 import { encrypt } from '../utils/encrypt.util'
 
 @Entity({ name: 'users' })
@@ -42,9 +40,8 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date
 
-  // Relations
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[]
+  @DeleteDateColumn()
+  deletedAt?: Date
 
   // Entity Listeners (Hooks)
   @BeforeInsert()
