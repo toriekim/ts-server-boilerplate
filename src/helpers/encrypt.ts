@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const { JWT_SECRET = 'superbigsecret', SALT_ROUNDS = 5 } = process.env
+const { JWT_SECRET = 'superbigsecret', SALT_ROUNDS = 10 } = process.env
 
 // The encrypt class helps hash password, compare it for login, and generate a token
 export class encrypt {
