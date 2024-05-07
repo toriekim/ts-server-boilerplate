@@ -9,7 +9,7 @@ const { JWT_SECRET = 'superbigsecret', SALT_ROUNDS = 10 } = process.env
 // The encrypt class helps hash password, compare it for login, and generate a token
 export class encrypt {
   static async hashPassword(password: string) {
-    return bcrypt.hashSync(password, SALT_ROUNDS)
+    return bcrypt.hashSync(password, Number(SALT_ROUNDS))
   }
 
   static comparePassword(password: string, hashPassword: string) {

@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import { AppDataSource } from '../configs/db'
+import { AppDataSource } from '../configs/database/data-source'
 import { User } from '../entities/User.entity'
 import { encrypt } from '../utils/encrypt.util'
 import { HTTP401Error, HTTP404Error } from '../utils/httpError.util'

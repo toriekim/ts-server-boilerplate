@@ -34,16 +34,15 @@ export const getById = async (id: string) => {
 export const create = async (newUserInfo: UserType) => {
   const hashedPassword = await encrypt.hashPassword(newUserInfo.password)
 
-  const createdUser = await UserRepository.createQueryBuilder()
-    .insert()
-    .into(User)
-    .values({ ...newUserInfo, password: hashedPassword })
-    .returning('id, firstName, lastName, username, email, isAdmin')
-    .execute()
+  const newUser = await UserRepository.create({
+    ...newUserInfo,
+    password: hashedPassword
+  })
+  const createdUser = await UserRepository.save(newUser)
 
-  logger.info('New user created: ', createdUser.raw[0].id)
-  const token = encrypt.generateToken({ id: createdUser.raw[0].id })
-  return { user: createdUser.raw[0], token }
+  logger.info('New user created: ', createdUser.id)
+  const token = encrypt.generateToken({ id: createdUser.id })
+  return { user: createdUser, token }
 }
 
 export const update = async (id: string, updateOptions: UserUpdateOptions) => {
